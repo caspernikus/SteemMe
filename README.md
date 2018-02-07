@@ -22,3 +22,6 @@ The goal is to have an easy overview about your Wallet / Account Statistics / Hi
 - Make Changes
 - Create A Pull Request
 - Get Merged
+
+## Example
+![Example](https://lh3.googleusercontent.com/V-7mllf4vXyyaq_baJ4GvzDN4K8iXZgV4YL97A9Bh7x3AKGAIP7qvABQS8uCgIbyhios4_334tw=w640-h400-e365)
