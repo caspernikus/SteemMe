@@ -1,0 +1,113 @@
+.profile-pic {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 21px;
+    overflow: hidden;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    border: 2px solid white;
+    background: lightgray;
+}
+
+.hidden {
+    display: none;
+}
+
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    margin: auto;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.text-center {
+    text-align: center;
+}
+
+.username {
+    letter-spacing: 3px;
+    text-align: left;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.button {
+    display: block;
+    margin-top: 15px;
+    padding: 4px 8px;
+    font-weight: bold;
+    color: white;
+    background: #74b9ff;
+    border: 1px solid #74b9ff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background: #0984e3;
+    border: 1px solid #0984e3;
+}
+
+.header {
+    padding: 8px 8px 0px 8px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px !important;
+}
+
+.badges {
+    font-size: 10px;
+    margin-top: 5px;
+    text-align: left;
+    display: inline-block;
+    float: left;
+}
+
+.badge {
+    padding: 4px 6px;
+    display: inline-block;
+    color: rgba(0,0,0,.65);
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.body {
+    margin: 0px 8px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.oi {
+    margin-right: 5px;
+}
+
+hr {
+    color: lightgray;
+    border: none;
+    border-bottom: 1px solid lightgray;
+}
+
+.hrcustom {
+    font-size: 14px;
+    margin: 25px 0px 15px 0px;
+    line-height: 14px;
+}
+
+.wallet-div {
+    width: 100%;
+}

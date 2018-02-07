@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>
+        <script src="../js/index.js"></script>
+        <link rel="stylesheet" href="../styles/styles.css">
+        <link rel="stylesheet" href="../styles/circular-prog-bar.css">
+        <link href="../../img/open-iconic/font/css/open-iconic.css" rel="stylesheet">
+    </head>
+    <body style="width: 280px; background: #f3f4f6">
+        <div id="error" class="hidden text-center" style="color: red;">
+            <h3>An Error Occurred</h3>
+            <div id="error_msg">
+            </div>
+            <a class="button" id="btn-retry">
+                RETRY
+            </a>
+        </div>
+        <div id="indicator" class="loader">
+        </div>
+        <div id="container" class="hidden">
+            <div id="user_avatar" class="flex">
+            </div>
+            <div class="flex hrcustom" style="margin-top: 10px">
+                <span class="oi" data-glyph="dollar"></span>Wallet
+                <hr style="flex: 1; margin-left: 10px">
+            </div>
+            <div class="flex" style="justify-content: space-around; margin: 0px 10px; text-align: center;">
+                <div class="wallet-div" id="steem_balance">
+                </div>
+                <div class="wallet-div" id="sbd_balance">
+                </div>
+                <div class="wallet-div">
+                    <div id="steem_power">
+                    </div>
+                    <div id="steem_power_del">
+                    </div>
+                </div>
+            </div>
+            <div class="flex hrcustom">
+                <span class="oi" data-glyph="graph"></span>Statistics
+                <hr style="flex: 1; margin-left: 10px">
+            </div>
+            <div class="flex" id="vote_power_container">
+                <div class="progress-circle" id="vote_power_progress">
+                   <span style="color: #06D6A9" id="vote_power_span">%</span>
+                   <div class="left-half-clipper">
+                      <div style="background-color: #06D6A9" class="first50-bar"></div>
+                      <div style="border: 0.45em solid #06D6A9" class="value-bar"></div>
+                   </div>
+                </div>
+                <div style="flex: 2;">
+                    <div class="bold">Current Voting Power</div>
+                    <div>An upvote is worth roughly </div>
+                    <div id="upvote_worth" style="color: gray; margin: 5px;">~ </div>
+                </div>
+            </div>
+            <!-- <div class="flex" style="margin-top: 15px" id="pending_payout_container">
+                <div class="progress-circle p100 over50">
+                   <span class="small" style="color: #0984e3" id="pending_payout_span"></span>
+                   <div class="left-half-clipper">
+                      <div style="background-color: #0984e3" class="first50-bar"></div>
+                      <div style="border: 0.45em solid #0984e3" class="value-bar"></div>
+                   </div>
+                </div>
+                <div style="flex: 2">
+                    <div class="bold">Current Pending Payouts</div>
+                    <div>Payout today </div>
+                    <div>Payout tomorrow </div>
+                </div>
+            </div>
+            <div class="flex hrcustom">
+                <span class="oi" data-glyph="cog"></span>Settings
+                <hr style="flex: 1; margin-left: 10px">
+            </div> -->
+        </div>
+    </body>
+</html>
