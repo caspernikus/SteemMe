@@ -16,6 +16,13 @@ The goal is to have an easy overview about your Wallet / Account Statistics / Hi
 - Next Up: V.0.0.2:
   - Quick Links
   - More detailed Options Page
+- V.0.1:
+  - Pending Payouts
+  - Statistics about earned SBD / SP over last Week (collapsible + graph)
+  - Bandwidth Data
+  - UI
+  - Promises and better loading times
+  - More...
 
 ## Contribute
 - Fork this Repo
