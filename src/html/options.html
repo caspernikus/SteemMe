@@ -2,18 +2,21 @@
 <head>
 	<title>Options</title>
 	<script type="text/javascript" src="../js/options.js"></script>
-	<style>
-		.hidden {
-			display: none;
-		}
-	</style>
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
 </head>
 <body>
-	Steem User Account:
-	<input id="username-input" type="text" name="" value="">
-	<div id="error" class="hidden" style="color: red">Please enter a valid username!</div>
-	<hr />
-	<button id="save">Save</button>
-	<div id="status"></div>
+	<div class="container">
+		<h6>Username:</h6>
+		<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1">@</span>
+		  <input id="username-input" type="text" class="form-control" placeholder="Enter username..." aria-describedby="basic-addon1">
+		  <span class="input-group-btn">
+	        <button class="btn btn-primary" type="button" id="save">Save</button>
+	      </span>
+	  	</div>
+    	<div id="error" class="hidden" style="color: red">Please enter a valid username!</div>
+    	<div id="status"></div>
+		<hr>
+	</div>
 </body>
 </html>

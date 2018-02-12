@@ -1,4 +1,6 @@
-.afphoto
+*.afphoto
 steem.png
 wallpaper.png
 wallpaper_small.png
+*.zip
+.DS_Store

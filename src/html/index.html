@@ -1,12 +1,13 @@
 <html>
     <head>
+        <script src="../js/vendor/jquery.min.js"></script>
         <script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>
         <script src="../js/index.js"></script>
         <link rel="stylesheet" href="../styles/styles.css">
         <link rel="stylesheet" href="../styles/circular-prog-bar.css">
         <link href="../../img/open-iconic/font/css/open-iconic.css" rel="stylesheet">
     </head>
-    <body style="width: 280px; background: #f3f4f6">
+    <body style="width: 280px; background: #f3f4f6; height: auto">
         <div id="error" class="hidden text-center" style="color: red;">
             <h3>An Error Occurred</h3>
             <div id="error_msg">
@@ -24,7 +25,7 @@
                 <span class="oi" data-glyph="dollar"></span>Wallet
                 <hr style="flex: 1; margin-left: 10px">
             </div>
-            <div class="flex" style="justify-content: space-around; margin: 0px 10px; text-align: center;">
+            <div class="flex space-around">
                 <div class="wallet-div" id="steem_balance">
                 </div>
                 <div class="wallet-div" id="sbd_balance">
@@ -67,11 +68,25 @@
                     <div>Payout today </div>
                     <div>Payout tomorrow </div>
                 </div>
-            </div>
-            <div class="flex hrcustom">
-                <span class="oi" data-glyph="cog"></span>Settings
-                <hr style="flex: 1; margin-left: 10px">
             </div> -->
+            <div class="flex hrcustom">
+                <span class="oi" data-glyph="link-intact"></span>Links
+                <hr style="flex: 1; margin-left: 10px">
+            </div>
+            <div class="flex space-around">
+                <a class="quick_link">
+                    <img src="../../img/steemit.png" alt="Steemit" class="quick_link-img" data-href="steemit" />
+                </a>
+                <a class="quick_link">
+                    <img src="../../img/busy.png" alt="Busy" class="quick_link-img" data-href="busy"/>
+                </a>
+                <a class="quick_link">
+                    <img src="../../img/utopian.png" alt="Utopian" class="quick_link-img" data-href="utopian" />
+                </a>
+                <a class="quick_link">
+                    <img src="../../img/dtube.png" alt="DTube" class="quick_link-img" data-href="dtube" />
+                </a>
+            </div>
         </div>
     </body>
 </html>

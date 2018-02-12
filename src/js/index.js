@@ -15,8 +15,27 @@ function onLoad() {
         getAccountData(username);
 	});
 
-	document.getElementById("btn-retry").addEventListener("click", retryClicked);
+	$("#btn-retry").on("click", retryClicked);
+	console.log($(".quick_link"));
+	$(".quick_link").on("click", linkClicked);
 
+}
+
+function linkClicked(e) {
+	switch (e.target.dataset.href) {
+		case "steemit":
+			window.open('https://steemit.com/@' + username, '_blank');
+			break;
+		case "busy":
+			window.open('https://busy.org/@' + username, '_blank');
+			break;
+		case "utopian":
+			window.open('https://utopian.io/@' + username, '_blank');
+			break;
+		case "dtube":
+			window.open('https://d.tube/#!/c/' + username, '_blank');
+			break;
+	}
 }
 
 function retryClicked() {
@@ -92,7 +111,7 @@ function getAccountData(username) {
 		setSteemPower(userData);
 
         const userAvatar = document.getElementById("user_avatar");
-		userAvatar.innerHTML = "<div class='profile-pic' style='background-image: url(https://steemitimages.com/u/"+ userData.name +"/avatar);'></div>" +
+		userAvatar.innerHTML = "<div class='profile-pic' style='background-size: cover; background-repeat: no-repeat; background-position: 50% 50%; background-image: url(https://steemitimages.com/u/"+ userData.name +"/avatar);'></div>" +
 		"<div style='margin-left: 10px; flex: 1'><div class='username'>"+ userData.name +" ("+ calculateRep(userData.reputation) +")</div><div id='badges' class='badges'></div></div>";
 
         const steemBalance = document.getElementById("steem_balance");
@@ -143,7 +162,7 @@ function setSteemPower(userData) {
 		steemPower.innerHTML = "<div style='font-weight: bold; font-size: 14px'>"+ steem_power.toFixed(2) +"</div>" +
 		"<div>SP</div>" + del_steem_power;
 
-		calculateEstVoteValue(result, steem_power + del_steem_power);
+		calculateEstVoteValue(result, steem_power + delegated_steem_power);
 	});
 }
 

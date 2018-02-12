@@ -4,9 +4,6 @@
     min-width: 42px;
     border-radius: 21px;
     overflow: hidden;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
     border: 2px solid white;
     background: lightgray;
 }
@@ -84,6 +81,16 @@
     justify-content: space-between;
 }
 
+.space-around {
+    justify-content: space-around;
+    margin: 0px 10px;
+    text-align: center;
+}
+
+.quick_link-img {
+    width: 18px;
+}
+
 .body {
     margin: 0px 8px;
 }
@@ -110,4 +117,8 @@ hr {
 
 .wallet-div {
     width: 100%;
+}
+
+a.quick_link:hover {
+    cursor: pointer;
 }
