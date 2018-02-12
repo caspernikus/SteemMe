@@ -13,15 +13,17 @@ The goal is to have an easy overview about your Wallet / Account Statistics / Hi
   - Show Basic Wallet Information
   - Show Voting Power & Vote Worth
   - Show Basic Account Information
-- Next Up: V.0.0.2:
+- V.0.0.2:
   - Quick Links
   - More detailed Options Page
-- V.0.1:
+- Next Up: V.0.0.3:
   - Pending Payouts
+  - Promises
+- V.0.1:
   - Statistics about earned SBD / SP over last Week (collapsible + graph)
   - Bandwidth Data
   - UI
-  - Promises and better loading times
+  - Better loading times
   - More...
 
 ## Contribute
