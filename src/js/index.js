@@ -1,4 +1,4 @@
-steem.api.setOptions({ url: 'wss://rpc.buildteam.io' });
+steem.api.setOptions({ url: 'https://api.steemit.com' });
 
 window.addEventListener('load', onLoad);
 
@@ -109,6 +109,7 @@ function getAccountData(username) {
 
 		setVotingPower(userData);
 		setSteemPower(userData);
+		calculatePendingPayout();
 
         const userAvatar = document.getElementById("user_avatar");
 		userAvatar.innerHTML = "<div class='profile-pic' style='background-size: cover; background-repeat: no-repeat; background-position: 50% 50%; background-image: url(https://steemitimages.com/u/"+ userData.name +"/avatar);'></div>" +
@@ -121,6 +122,10 @@ function getAccountData(username) {
         const sbdBalance = document.getElementById("sbd_balance");
         sbdBalance.innerHTML = "<div style='font-weight: bold; font-size: 14px'>"+ userData.sbd_balance.split(' ')[0] +"</div>" +
 		"<div>SBD</div>";
+
+		// Loaded everthing, so show content!
+		indicator.className += " hidden";
+		container.classList.remove('hidden');
 
         steem.api.getFollowCount(username, function(err, result) {
             if (err || !result || result.length === 0) {
@@ -136,10 +141,6 @@ function getAccountData(username) {
             followStata.innerHTML = "<div class='badge'><span class='oi' data-glyph='person'></span> "+ followingCount +"</div>" +
             "<div class='badge'><span class='oi' data-glyph='people'></span> "+ followCount +"</div>" +
             "<div class='badge'><span class='oi' data-glyph='comment-square'></span> "+ userData.post_count +"</div>";
-
-            // Loaded everthing, so show content!
-			indicator.className += " hidden";
-			container.classList.remove('hidden');
         });
     });
 }
@@ -164,6 +165,30 @@ function setSteemPower(userData) {
 
 		calculateEstVoteValue(result, steem_power + delegated_steem_power);
 	});
+}
+
+function calculatePendingPayout() {
+	steem.api.getDiscussionsByBlog({tag: username, limit: 100}, function(err, posts) {
+		if (err) {
+			console.log(err);
+			return;
+		}
+
+		var pendingPosts = posts.filter(post => new Date(post.cashout_time).getFullYear() !== 1969);
+
+		var totalPayout = 0;
+		var todayPayout = 0;
+		pendingPosts.forEach((post) => {
+			if (new Date(post.cashout_time).toDateString() === new Date().toDateString()) {
+				todayPayout += Number(post.pending_payout_value.replace(' SBD', ''));
+			}
+			totalPayout += Number(post.pending_payout_value.replace(' SBD', ''));
+		});
+
+		document.getElementById('pending_payout_span').innerHTML = totalPayout.toFixed(1);
+		document.getElementById('pending_payout').innerHTML += totalPayout.toFixed(3) + " SBD";
+		document.getElementById('pending_payout_tdy').innerHTML += todayPayout.toFixed(3) + " SBD";
+    });
 }
 
 function calculateEstVoteValue(globalData, steemPower) {
