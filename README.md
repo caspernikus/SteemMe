@@ -16,14 +16,15 @@ The goal is to have an easy overview about your Wallet / Account Statistics / Hi
 - V.0.0.2:
   - Quick Links
   - More detailed Options Page
-- Next Up: V.0.0.3:
-  - Pending Payouts
-  - Promises
+- V.0.0.3:
+  - Quicker loading times
+  - Pending payouts (Total / Today)
+- Next Up: V.0.0.4:
+  - Statistics about earned SBD / SP over last Week
 - V.0.1:
-  - Statistics about earned SBD / SP over last Week (collapsible + graph)
   - Bandwidth Data
   - UI
-  - Better loading times
+  - Steem / SBD Price
   - More...
 
 ## Contribute
@@ -33,4 +34,4 @@ The goal is to have an easy overview about your Wallet / Account Statistics / Hi
 - Get Merged
 
 ## Example
-![Example](https://lh3.googleusercontent.com/V-7mllf4vXyyaq_baJ4GvzDN4K8iXZgV4YL97A9Bh7x3AKGAIP7qvABQS8uCgIbyhios4_334tw=w640-h400-e365)
+![Example](https://res.cloudinary.com/hpiynhbhq/image/upload/v1519036718/f1bp1kulrthavw34jfkg.png)
