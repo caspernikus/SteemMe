@@ -4,6 +4,8 @@ window.addEventListener('load', onLoad);
 
 var voting_power = 0;
 var username = null;
+var activeDetailContainer = '';
+
 function onLoad() {
 	chrome.storage.sync.get(["username"], function(items) {
 		username = items.username;
@@ -16,9 +18,31 @@ function onLoad() {
 	});
 
 	$("#btn-retry").on("click", retryClicked);
-	console.log($(".quick_link"));
 	$(".quick_link").on("click", linkClicked);
 
+	$("#more_stats").on("click", moreStatisticsClicked);
+}
+
+function moreStatisticsClicked(evt) {
+	evt.preventDefault();
+
+	if (activeDetailContainer === 'stats') {
+		$('#wallet-container').removeClass('hidden');
+		$('#links-container').removeClass('hidden');
+		$('#stats-detail-container').addClass('hidden');
+		activeDetailContainer = '';
+		evt.currentTarget.innerHTML = 'More';
+
+		$(window).trigger('resize');
+		return;
+	}
+
+	$('#wallet-container').addClass('hidden');
+	$('#links-container').addClass('hidden');
+	$('#stats-detail-container').removeClass('hidden');
+	evt.currentTarget.innerHTML = 'Less';
+	activeDetailContainer = 'stats';
+	$(window).trigger('resize');
 }
 
 function linkClicked(e) {
@@ -164,6 +188,7 @@ function setSteemPower(userData) {
 		"<div>SP</div>" + del_steem_power;
 
 		calculateEstVoteValue(result, steem_power + delegated_steem_power);
+		calculateBandwidthPercentage(userData, result);
 	});
 }
 
@@ -212,4 +237,32 @@ function calculateEstVoteValue(globalData, steemPower) {
 			}
 		});
 	});
+}
+
+function calculateBandwidthPercentage(userData, globalData) {
+	const STEEMIT_BANDWIDTH_AVERAGE_WINDOW_SECONDS = 60 * 60 * 24 * 7;
+
+    const vestingShares = parseFloat(userData.vesting_shares.replace(" VESTS", ""))
+    const receivedVestingShares = parseFloat(userData.received_vesting_shares.replace(" VESTS", ""))
+    const totalVestingShares = parseFloat(globalData.total_vesting_shares.replace(" VESTS", ""))
+    const max_virtual_bandwidth = parseInt(globalData.max_virtual_bandwidth, 10)
+    const average_bandwidth = parseInt(userData.average_bandwidth, 10)
+    const delta_time = (new Date - new Date(userData.last_bandwidth_update + "Z")) / 1000
+
+    var bandwidthAllocated = (max_virtual_bandwidth  * (vestingShares + receivedVestingShares) / totalVestingShares)
+    bandwidthAllocated = Math.round(bandwidthAllocated / 1000000);
+
+    var new_bandwidth = 0
+    if (delta_time < STEEMIT_BANDWIDTH_AVERAGE_WINDOW_SECONDS) {
+      new_bandwidth = (((STEEMIT_BANDWIDTH_AVERAGE_WINDOW_SECONDS - delta_time) * average_bandwidth) / STEEMIT_BANDWIDTH_AVERAGE_WINDOW_SECONDS)
+    }
+
+    new_bandwidth = Math.round(new_bandwidth / 1000000)
+
+	const bandWidthRemaining = parseInt(100 - (100 * new_bandwidth / bandwidthAllocated));
+	const over50 = (bandWidthRemaining > 50) ? ' over50' : '';
+
+	$('#bandwidth_used')[0].innerHTML = bytesToSize(new_bandwidth) + " of " + bytesToSize(bandwidthAllocated);
+	$("#bandwidth_span")[0].innerHTML = bandWidthRemaining + "%";
+    $("#bandwidth_percentage")[0].className += " p" + bandWidthRemaining + over50;
 }

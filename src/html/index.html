@@ -1,27 +1,29 @@
-<html>
-    <head>
-        <script src="../js/vendor/jquery.min.js"></script>
-        <script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>
-        <script src="../js/index.js"></script>
-        <link rel="stylesheet" href="../styles/styles.css">
-        <link rel="stylesheet" href="../styles/circular-prog-bar.css">
-        <link href="../../img/open-iconic/font/css/open-iconic.css" rel="stylesheet">
-    </head>
-    <body style="width: 280px; background: #f3f4f6; height: auto">
-        <div id="error" class="hidden text-center" style="color: red;">
-            <h3>An Error Occurred</h3>
-            <div id="error_msg">
-            </div>
-            <a class="button" id="btn-retry">
-                RETRY
-            </a>
+<!DOCTYPE html>
+<head>
+    <script src="../js/vendor/jquery.min.js"></script>
+    <script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/index.js"></script>
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="../styles/circular-prog-bar.css">
+    <link href="../../img/open-iconic/font/css/open-iconic.css" rel="stylesheet">
+</head>
+<body style="width: 280px; background: #f3f4f6; height: auto">
+    <div id="error" class="hidden text-center" style="color: red;">
+        <h3>An Error Occurred</h3>
+        <div id="error_msg">
         </div>
-        <div id="indicator" class="loader">
+        <a class="button" id="btn-retry">
+            RETRY
+        </a>
+    </div>
+    <div id="indicator" class="loader">
+    </div>
+    <div id="container" class="hidden">
+        <div id="user_avatar" class="flex">
         </div>
-        <div id="container" class="hidden">
-            <div id="user_avatar" class="flex">
-            </div>
-            <div class="flex hrcustom" style="margin-top: 10px">
+        <div id="wallet-container">
+            <div class="flex hrcustom">
                 <span class="oi" data-glyph="dollar"></span>Wallet
                 <hr style="flex: 1; margin-left: 10px">
             </div>
@@ -37,11 +39,29 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div id="stats-container">
             <div class="flex hrcustom">
                 <span class="oi" data-glyph="graph"></span>Statistics
-                <hr style="flex: 1; margin-left: 10px">
+                <hr style="flex: 1; margin: 0px 10px">
+                <a class="quick_link" id="more_stats">More</a>
             </div>
-            <div class="flex" id="vote_power_container">
+            <div id="stats-detail-container" class="hidden">
+                <div class="flex" id="vote_power_container">
+                    <div class="progress-circle" id="bandwidth_percentage">
+                       <span style="color: #c0392b" id="bandwidth_span">%</span>
+                       <div class="left-half-clipper">
+                          <div style="background-color: #c0392b" class="first50-bar"></div>
+                          <div style="border: 0.45em solid #c0392b" class="value-bar"></div>
+                       </div>
+                    </div>
+                    <div style="flex: 2;">
+                        <div class="bold">Bandwidth used:</div>
+                        <div id="bandwidth_used" style="color: gray; margin: 5px;">~ </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex" style="margin-top: 15px" id="vote_power_container">
                 <div class="progress-circle" id="vote_power_progress">
                    <span style="color: #06D6A9" id="vote_power_span">%</span>
                    <div class="left-half-clipper">
@@ -70,6 +90,8 @@
                     <div id="pending_payout_tdy" style="color: gray; margin: 5px;">~ </div>
                 </div>
             </div>
+        </div>
+        <div id="links-container">
             <div class="flex hrcustom">
                 <span class="oi" data-glyph="link-intact"></span>Links
                 <hr style="flex: 1; margin-left: 10px">
@@ -89,5 +111,5 @@
                 </a>
             </div>
         </div>
-    </body>
-</html>
+    </div>
+</body>
