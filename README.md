@@ -8,21 +8,13 @@ SteemMe is a Steemit Browser Extension, which shows the most important informati
 The goal is to have an easy overview about your Wallet / Account Statistics / Hidden Steem Blockchain Informations (Bandwidth, VP)
 
 ## Roadmap
-- V.0.0.1:
-  - Google Chrome Extension
-  - Show Basic Wallet Information
-  - Show Voting Power & Vote Worth
-  - Show Basic Account Information
-- V.0.0.2:
-  - Quick Links
-  - More detailed Options Page
-- V.0.0.3:
-  - Quicker loading times
-  - Pending payouts (Total / Today)
-- Next Up: V.0.0.4:
+- V.0.0.4:
+  - Bandwidth Data + First simple navigation
+- V.0.0.5:
+  - Steem / SBD Price
+- V.0.0.6:
   - Statistics about earned SBD / SP over last Week
 - V.0.1:
-  - Bandwidth Data
   - UI
   - Steem / SBD Price
   - More...
