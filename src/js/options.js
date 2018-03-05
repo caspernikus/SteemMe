@@ -24,7 +24,6 @@ function onLoad() {
 }
 
 function selectCurrency() {
-	console.log('dd');
 	const currency = selectCur.val();
 
 	chrome.storage.sync.set({
