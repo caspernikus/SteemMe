@@ -4,14 +4,20 @@ window.addEventListener('load', onLoad);
 
 var voting_power = 0;
 var username = null;
+var currency = null;
 var activeDetailContainer = '';
 
 function onLoad() {
-	chrome.storage.sync.get(["username"], function(items) {
+	chrome.storage.sync.get(["username", "currency"], function(items) {
 		username = items.username;
+		currency = items.currency;
 		if (username === undefined || username === null) {
 			showError('no_username');
 			return;
+		}
+
+		if (currency === undefined || currency === null) {
+			currency = "usd"
 		}
 
         getAccountData(username);
@@ -109,8 +115,8 @@ function setVotingPower(userData) {
 
 	const over50 = (vpow > 50) ? ' over50' : ''
 
-    document.getElementById("vote_power_span").innerHTML = vpow + "%";
-    document.getElementById("vote_power_progress").className += " p" + vpow + over50;
+    $("#vote_power_span")[0].innerHTML = vpow + "%";
+    $("#vote_power_progress").addClass('p' + vpow + over50);
 
 	voting_power = vpow;
 }
@@ -119,8 +125,8 @@ function getAccountData(username) {
     var followCount = 0;
     var followingCount = 0;
 
-    const indicator = document.getElementById("indicator");
-    const container = document.getElementById("container");
+    const indicator = $("#indicator");
+    const container = $("#container");
 
     steem.api.getAccounts([username], function (err, result) {
         if (err || !result || result.length === 0) {
@@ -134,22 +140,25 @@ function getAccountData(username) {
 		setVotingPower(userData);
 		setSteemPower(userData);
 		calculatePendingPayout();
+console.log(getCurrencySymbol(currency));
+		$('#steem_price')[0].innerHTML = Number(getSteemPrice("steem", currency)).toFixed(2) + getCurrencySymbol(currency);
+		$('#sbd_price')[0].innerHTML = Number(getSteemPrice("steem-dollars", currency)).toFixed(2) + getCurrencySymbol(currency);
 
-        const userAvatar = document.getElementById("user_avatar");
+        const userAvatar = $("#user_avatar")[0];
 		userAvatar.innerHTML = "<div class='profile-pic' style='background-size: cover; background-repeat: no-repeat; background-position: 50% 50%; background-image: url(https://steemitimages.com/u/"+ userData.name +"/avatar);'></div>" +
 		"<div style='margin-left: 10px; flex: 1'><div class='username'>"+ userData.name +" ("+ calculateRep(userData.reputation) +")</div><div id='badges' class='badges'></div></div>";
 
-        const steemBalance = document.getElementById("steem_balance");
+        const steemBalance = $("#steem_balance")[0];
         steemBalance.innerHTML = "<div style='font-weight: bold; font-size: 14px'>"+ userData.balance.split(' ')[0] +"</div>" +
 		"<div>STEEM</div>";
 
-        const sbdBalance = document.getElementById("sbd_balance");
+        const sbdBalance = $("#sbd_balance")[0];
         sbdBalance.innerHTML = "<div style='font-weight: bold; font-size: 14px'>"+ userData.sbd_balance.split(' ')[0] +"</div>" +
 		"<div>SBD</div>";
 
 		// Loaded everthing, so show content!
-		indicator.className += " hidden";
-		container.classList.remove('hidden');
+		indicator.addClass("hidden");
+		container.removeClass('hidden');
 
         steem.api.getFollowCount(username, function(err, result) {
             if (err || !result || result.length === 0) {
@@ -161,7 +170,7 @@ function getAccountData(username) {
             followCount = result.follower_count;
             followingCount = result.following_count;
 
-            const followStata = document.getElementById("badges");
+            const followStata = $("#badges")[0];
             followStata.innerHTML = "<div class='badge'><span class='oi' data-glyph='person'></span> "+ followingCount +"</div>" +
             "<div class='badge'><span class='oi' data-glyph='people'></span> "+ followCount +"</div>" +
             "<div class='badge'><span class='oi' data-glyph='comment-square'></span> "+ userData.post_count +"</div>";
@@ -183,7 +192,7 @@ function setSteemPower(userData) {
 
 		const del_steem_power = (delegated_steem_power.toFixed(0) != 0) ? "<div style='font-size: 10px'> ("+ delegated_steem_power.toFixed(2) +")</div>" : "";
 
-		const steemPower = document.getElementById("steem_power");
+		const steemPower = $("#steem_power")[0];
 		steemPower.innerHTML = "<div style='font-weight: bold; font-size: 14px'>"+ steem_power.toFixed(2) +"</div>" +
 		"<div>SP</div>" + del_steem_power;
 
@@ -210,9 +219,9 @@ function calculatePendingPayout() {
 			totalPayout += Number(post.pending_payout_value.replace(' SBD', ''));
 		});
 
-		document.getElementById('pending_payout_span').innerHTML = totalPayout.toFixed(1);
-		document.getElementById('pending_payout').innerHTML += totalPayout.toFixed(3) + " SBD";
-		document.getElementById('pending_payout_tdy').innerHTML += todayPayout.toFixed(3) + " SBD";
+		$('#pending_payout_span')[0].innerHTML = totalPayout.toFixed(1);
+		$('#pending_payout')[0].innerHTML += totalPayout.toFixed(3) + " SBD";
+		$('#pending_payout_tdy')[0].innerHTML += todayPayout.toFixed(3) + " SBD";
     });
 }
 
@@ -233,7 +242,7 @@ function calculateEstVoteValue(globalData, steemPower) {
 				votingPower = parseInt((votingPower + 49) / 50);
 				var votingWorth = parseInt((steemPower / totalQuota) * votingPower * 100) * totalRewardQuota * steemSbdRatio;
 
-				document.getElementById('upvote_worth').innerHTML += votingWorth.toFixed(4) + " SBD";
+				$('#upvote_worth')[0].innerHTML += votingWorth.toFixed(4) + " SBD";
 			}
 		});
 	});

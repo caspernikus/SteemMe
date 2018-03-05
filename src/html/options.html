@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
 <head>
 	<title>Options</title>
+	<script src="../js/vendor/jquery.min.js"></script>
 	<script type="text/javascript" src="../js/options.js"></script>
 	<link rel="stylesheet" href="../css/bootstrap.min.css">
 </head>
@@ -14,9 +15,16 @@
 	        <button class="btn btn-primary" type="button" id="save">Save</button>
 	      </span>
 	  	</div>
-    	<div id="error" class="hidden" style="color: red">Please enter a valid username!</div>
+		<div id="error" class="hidden" style="color: red">Please enter a valid username!</div>
+		<h6>Currency:</h6>
+		<select class="form-control" id="currency_select">
+			<option value="usd">USD</option>
+			<option value="eur">EUR</option>
+			<option value="gbp">GPB</option>
+			<option value="aud">AUD</option>
+			<option value="cad">CAD</option>
+		</select>
     	<div id="status"></div>
 		<hr>
 	</div>
 </body>
-</html>
