@@ -140,7 +140,7 @@ function getAccountData(username) {
 		setVotingPower(userData);
 		setSteemPower(userData);
 		calculatePendingPayout();
-console.log(getCurrencySymbol(currency));
+
 		$('#steem_price')[0].innerHTML = Number(getSteemPrice("steem", currency)).toFixed(2) + getCurrencySymbol(currency);
 		$('#sbd_price')[0].innerHTML = Number(getSteemPrice("steem-dollars", currency)).toFixed(2) + getCurrencySymbol(currency);
 
