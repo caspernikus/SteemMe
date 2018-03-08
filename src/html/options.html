@@ -2,6 +2,7 @@
 <head>
 	<title>Options</title>
 	<script src="../js/vendor/jquery.min.js"></script>
+	<script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>
 	<script type="text/javascript" src="../js/options.js"></script>
 	<link rel="stylesheet" href="../css/bootstrap.min.css">
 </head>
@@ -16,6 +17,14 @@
 	      </span>
 	  	</div>
 		<div id="error" class="hidden" style="color: red">Please enter a valid username!</div>
+		<h6>Posting Key:</h6>
+		<div class="input-group">
+		  <input id="active-input" type="text" class="form-control" placeholder="Enter your private posting key..." aria-describedby="basic-addon1">
+		  <span class="input-group-btn">
+	        <button class="btn btn-primary" type="button" id="save_active">Save</button>
+	      </span>
+	  	</div>
+		<div id="error_key" class="hidden" style="color: red">Please enter a valid key!</div>
 		<h6>Currency:</h6>
 		<select class="form-control" id="currency_select">
 			<option value="usd">USD</option>

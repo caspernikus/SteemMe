@@ -17,15 +17,15 @@
             RETRY
         </a>
     </div>
-    <div id="indicator" class="loader">
-    </div>
+    <div id="indicator" class="loader"></div>
     <div id="container" class="hidden">
         <div id="user_avatar" class="flex">
         </div>
         <div id="wallet-container">
             <div class="flex hrcustom">
                 <span class="oi" data-glyph="dollar"></span>Wallet
-                <hr style="flex: 1; margin-left: 10px">
+                <hr style="flex: 1; margin: 0px 10px">
+                <a class="quick_link" id="more_wallet">More</a>
             </div>
             <div class="flex space-around">
                 <div class="wallet-div" id="steem_balance">
@@ -37,6 +37,13 @@
                     </div>
                     <div id="steem_power_del">
                     </div>
+                </div>
+            </div>
+            <div id="wallet-detail-container" class="hidden">
+                <div id="reward-indicator" class="loader hidden" style="margin-top: 15px"></div>
+                <div class="hidden" style="margin: 15px 20px; text-align: center" id="rewards-container">
+                    <b>Unclaimed rewards: <span id="rewards-unclaimed"></span></b>
+                    <button class="button_redeem">Claim Rewards</button>
                 </div>
             </div>
         </div>

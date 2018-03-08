@@ -4,20 +4,27 @@ window.addEventListener('load', onLoad);
 
 var voting_power = 0;
 var username = null;
+var userData = null;
 var currency = null;
+var active_key = null;
 var activeDetailContainer = '';
 
 function onLoad() {
-	chrome.storage.sync.get(["username", "currency"], function(items) {
+	chrome.storage.sync.get(["username", "currency", "active"], function(items) {
 		username = items.username;
 		currency = items.currency;
+		active_key = items.active;
 		if (username === undefined || username === null) {
 			showError('no_username');
 			return;
 		}
 
 		if (currency === undefined || currency === null) {
-			currency = "usd"
+			currency = "usd";
+		}
+
+		if (active_key === undefined || active_key === null) {
+			active_key = null;
 		}
 
         getAccountData(username);
@@ -25,8 +32,32 @@ function onLoad() {
 
 	$("#btn-retry").on("click", retryClicked);
 	$(".quick_link").on("click", linkClicked);
+	$(".button_redeem").on("click", claimRewards);
 
 	$("#more_stats").on("click", moreStatisticsClicked);
+	$("#more_wallet").on("click", moreWalletClicked);
+}
+
+function moreWalletClicked(evt) {
+	evt.preventDefault();
+
+	if (activeDetailContainer === 'wallet') {
+		$('#stats-container').removeClass('hidden');
+		$('#links-container').removeClass('hidden');
+		$('#wallet-detail-container').addClass('hidden');
+		activeDetailContainer = '';
+		evt.currentTarget.innerHTML = 'More';
+
+		$(window).trigger('resize');
+		return;
+	}
+
+	$('#stats-container').addClass('hidden');
+	$('#links-container').addClass('hidden');
+	$('#wallet-detail-container').removeClass('hidden');
+	evt.currentTarget.innerHTML = 'Less';
+	activeDetailContainer = 'wallet';
+	$(window).trigger('resize');
 }
 
 function moreStatisticsClicked(evt) {
@@ -121,6 +152,22 @@ function setVotingPower(userData) {
 	voting_power = vpow;
 }
 
+function claimRewards(e) {
+	e.preventDefault();
+
+	$('#reward-indicator').removeClass('hidden');
+	$('#rewards-container').addClass('hidden');
+	steem.broadcast.claimRewardBalance(active_key, username, '0.000 STEEM', userData.reward_sbd_balance, userData.reward_vesting_balance, function(err, result) {
+		if (err) {
+			console.log(err);
+			return;
+		}
+
+		$('#reward-indicator').addClass('hidden');
+		getAccountData(username);
+	});
+}
+
 function getAccountData(username) {
     var followCount = 0;
     var followingCount = 0;
@@ -135,11 +182,33 @@ function getAccountData(username) {
 			return;
         }
 
-        const userData = result[0];
+        userData = result[0];
 
 		setVotingPower(userData);
 		setSteemPower(userData);
 		calculatePendingPayout();
+
+		const user_reward_vesting_steem = Number(userData.reward_vesting_steem.replace(" STEEM", ""))
+		const user_reward_sbd_balance = Number(userData.reward_sbd_balance.replace(" SBD", ""))
+
+		if (active_key && active_key !== null && (user_reward_sbd_balance > 0 || user_reward_vesting_steem > 0)) {
+			$('#rewards-container').removeClass('hidden');
+			var unclaimedString = '';
+
+			if (user_reward_sbd_balance > 0) {
+				unclaimedString += user_reward_sbd_balance + 'SBD';
+			}
+
+			if (unclaimedString.length > 0) {
+				unclaimedString += ' & '
+			}
+
+			if (user_reward_vesting_steem > 0) {
+				unclaimedString += user_reward_vesting_steem + 'SP';
+			}
+
+			$('#rewards-unclaimed')[0].innerHTML = unclaimedString;
+		}
 
 		$('#steem_price')[0].innerHTML = Number(getSteemPrice("steem", currency)).toFixed(2) + getCurrencySymbol(currency);
 		$('#sbd_price')[0].innerHTML = Number(getSteemPrice("steem-dollars", currency)).toFixed(2) + getCurrencySymbol(currency);
@@ -220,8 +289,8 @@ function calculatePendingPayout() {
 		});
 
 		$('#pending_payout_span')[0].innerHTML = totalPayout.toFixed(1);
-		$('#pending_payout')[0].innerHTML += totalPayout.toFixed(3) + " SBD";
-		$('#pending_payout_tdy')[0].innerHTML += todayPayout.toFixed(3) + " SBD";
+		$('#pending_payout')[0].innerHTML = '~ ' + totalPayout.toFixed(3) + " SBD";
+		$('#pending_payout_tdy')[0].innerHTML = '~ ' + todayPayout.toFixed(3) + " SBD";
     });
 }
 
@@ -242,7 +311,7 @@ function calculateEstVoteValue(globalData, steemPower) {
 				votingPower = parseInt((votingPower + 49) / 50);
 				var votingWorth = parseInt((steemPower / totalQuota) * votingPower * 100) * totalRewardQuota * steemSbdRatio;
 
-				$('#upvote_worth')[0].innerHTML += votingWorth.toFixed(4) + " SBD";
+				$('#upvote_worth')[0].innerHTML = '~ ' + votingWorth.toFixed(4) + " SBD";
 			}
 		});
 	});
