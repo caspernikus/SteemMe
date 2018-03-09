@@ -7,13 +7,13 @@ A Steemit Browser Extension
 SteemMe is a Steemit Browser Extension, which shows the most important informations about your account with one click.
 The goal is to have an easy overview about your Wallet / Account Statistics / Hidden Steem Blockchain Informations (Bandwidth, VP)
 
-### Current Version: V0.0.6
+### Current Version: V0.0.7
 
 ## Roadmap
-- V.0.0.6:
-  - Wallet Detail Page
-  - Claim Rewards
 - V.0.0.7:
+  - Wallet Detail Page - Show Wallet Value in selected Currency
+  - Update STEEM / SBD Price every minute
+- V.0.0.8:
   - Statistics about earned SBD / SP over last Week
 - V.0.1:
   - UI
