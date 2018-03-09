@@ -46,7 +46,7 @@ function moreWalletClicked(evt) {
 		$('#links-container').removeClass('hidden');
 		$('#wallet-detail-container').addClass('hidden');
 		activeDetailContainer = '';
-		evt.currentTarget.innerHTML = 'More';
+		evt.currentTarget.dataset.glyph = 'plus';
 
 		$(window).trigger('resize');
 		return;
@@ -55,7 +55,7 @@ function moreWalletClicked(evt) {
 	$('#stats-container').addClass('hidden');
 	$('#links-container').addClass('hidden');
 	$('#wallet-detail-container').removeClass('hidden');
-	evt.currentTarget.innerHTML = 'Less';
+	evt.currentTarget.dataset.glyph = 'minus';
 	activeDetailContainer = 'wallet';
 	$(window).trigger('resize');
 }
@@ -68,7 +68,7 @@ function moreStatisticsClicked(evt) {
 		$('#links-container').removeClass('hidden');
 		$('#stats-detail-container').addClass('hidden');
 		activeDetailContainer = '';
-		evt.currentTarget.innerHTML = 'More';
+		evt.currentTarget.dataset.glyph = 'plus';
 
 		$(window).trigger('resize');
 		return;
@@ -77,7 +77,7 @@ function moreStatisticsClicked(evt) {
 	$('#wallet-container').addClass('hidden');
 	$('#links-container').addClass('hidden');
 	$('#stats-detail-container').removeClass('hidden');
-	evt.currentTarget.innerHTML = 'Less';
+	evt.currentTarget.dataset.glyph = 'minus';
 	activeDetailContainer = 'stats';
 	$(window).trigger('resize');
 }
@@ -188,6 +188,8 @@ function getAccountData(username) {
 		setSteemPower(userData);
 		calculatePendingPayout();
 
+		setInterval(setUpPricesAndValue, 60 * 1000);
+
 		const user_reward_vesting_steem = Number(userData.reward_vesting_steem.replace(" STEEM", ""))
 		const user_reward_sbd_balance = Number(userData.reward_sbd_balance.replace(" SBD", ""))
 
@@ -209,9 +211,6 @@ function getAccountData(username) {
 
 			$('#rewards-unclaimed')[0].innerHTML = unclaimedString;
 		}
-
-		$('#steem_price')[0].innerHTML = Number(getSteemPrice("steem", currency)).toFixed(2) + getCurrencySymbol(currency);
-		$('#sbd_price')[0].innerHTML = Number(getSteemPrice("steem-dollars", currency)).toFixed(2) + getCurrencySymbol(currency);
 
         const userAvatar = $("#user_avatar")[0];
 		userAvatar.innerHTML = "<div class='profile-pic' style='background-size: cover; background-repeat: no-repeat; background-position: 50% 50%; background-image: url(https://steemitimages.com/u/"+ userData.name +"/avatar);'></div>" +
@@ -247,6 +246,28 @@ function getAccountData(username) {
     });
 }
 
+function setUpPricesAndValue() {
+	const steemPrice = Number(getSteemPrice("steem", currency)).toFixed(2);
+	const sbdPrice = Number(getSteemPrice("steem-dollars", currency)).toFixed(2);
+	const currencySymbol = getCurrencySymbol(currency);
+
+	$('#steem_price')[0].innerHTML = steemPrice + currencySymbol;
+	$('#sbd_price')[0].innerHTML = sbdPrice + currencySymbol;
+
+	const sbdBalance = userData.sbd_balance.split(' ')[0];
+	const steemBalance = userData.balance.split(' ')[0];
+	const steemPower = userData.steem_power;
+
+	const steemValue = (Number(steemBalance) * steemPrice).toFixed(2);
+	const spValue = (Number(steemPower) * steemPrice).toFixed(2);
+	const sbdValue = (Number(sbdBalance) * sbdPrice).toFixed(2);
+
+	$('#steem_total_value')[0].innerHTML = steemValue + currencySymbol;
+	$('#sp_total_value')[0].innerHTML = spValue + currencySymbol;
+	$('#sbd_total_value')[0].innerHTML = sbdValue + currencySymbol;
+	$('#total_value')[0].innerHTML = (Number(sbdValue) + Number(spValue) + Number(steemValue)) + currencySymbol;
+}
+
 function setSteemPower(userData) {
 	const vesting_shares = userData.vesting_shares;
 	const del_vesting_shares = userData.delegated_vesting_shares;
@@ -265,8 +286,11 @@ function setSteemPower(userData) {
 		steemPower.innerHTML = "<div style='font-weight: bold; font-size: 14px'>"+ steem_power.toFixed(2) +"</div>" +
 		"<div>SP</div>" + del_steem_power;
 
+		userData.steem_power = steem_power;
+
 		calculateEstVoteValue(result, steem_power + delegated_steem_power);
 		calculateBandwidthPercentage(userData, result);
+		setUpPricesAndValue();
 	});
 }
 

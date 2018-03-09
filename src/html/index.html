@@ -25,7 +25,7 @@
             <div class="flex hrcustom">
                 <span class="oi" data-glyph="dollar"></span>Wallet
                 <hr style="flex: 1; margin: 0px 10px">
-                <a class="quick_link" id="more_wallet">More</a>
+                <span class="oi quick_link small-text" data-glyph="plus" id="more_wallet"></span>
             </div>
             <div class="flex space-around">
                 <div class="wallet-div" id="steem_balance">
@@ -40,8 +40,31 @@
                 </div>
             </div>
             <div id="wallet-detail-container" class="hidden">
-                <div id="reward-indicator" class="loader hidden" style="margin-top: 15px"></div>
-                <div class="hidden" style="margin: 15px 20px; text-align: center" id="rewards-container">
+                <div style="margin: 0px 15px">
+                    <div class="flex hrcustom small-text">
+                        <span style="width: 50px">STEEM</span>
+                        <hr style="flex: 1; margin: 0px 10px">
+                        <span id="steem_total_value"></span>
+                    </div>
+                    <div class="flex hrcustom small-text">
+                        <span style="width: 50px">SP</span>
+                        <hr style="flex: 1; margin: 0px 10px">
+                        <span id="sp_total_value"></span>
+                    </div>
+                    <div class="flex hrcustom small-text">
+                        <span style="width: 50px">SBD</span>
+                        <hr style="flex: 1; margin: 0px 10px">
+                        <span id="sbd_total_value"></span>
+                    </div>
+                    <div class="flex hrcustom small-text" style="font-weight: bold">
+                        <span style="width: 50px">TOTAL</span>
+                        <hr style="flex: 1; margin: 0px 10px">
+                        <span id="total_value"></span>
+                    </div>
+                </div>
+
+                <div id="reward-indicator" class="loader hidden" style="margin-top: 20px"></div>
+                <div class="hidden" style="margin: 20px 20px; text-align: center" id="rewards-container">
                     <b>Unclaimed rewards: <span id="rewards-unclaimed"></span></b>
                     <button class="button_redeem">Claim Rewards</button>
                 </div>
@@ -51,7 +74,7 @@
             <div class="flex hrcustom">
                 <span class="oi" data-glyph="graph"></span>Statistics
                 <hr style="flex: 1; margin: 0px 10px">
-                <a class="quick_link" id="more_stats">More</a>
+                <span class="oi quick_link small-text" data-glyph="plus" id="more_stats"></span>
             </div>
             <div id="stats-detail-container" class="hidden">
                 <div class="flex" id="vote_power_container">

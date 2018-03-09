@@ -121,6 +121,10 @@
     margin-right: 5px;
 }
 
+.small-text {
+    font-size: 11px !important;
+}
+
 hr {
     color: lightgray;
     border: none;
@@ -137,6 +141,6 @@ hr {
     width: 100%;
 }
 
-a.quick_link:hover {
+.quick_link:hover {
     cursor: pointer;
 }

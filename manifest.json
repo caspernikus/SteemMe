@@ -6,7 +6,7 @@
       "48": "./img/icon_48px.png",
       "128": "./img/icon_128px.png"
   },
-  "version": "0.0.6",
+  "version": "0.0.7",
   "manifest_version": 2,
   "description": "",
   "browser_action": {
