@@ -28,6 +28,7 @@ function onLoad() {
 		}
 
         getAccountData(username);
+		getAccountHistory(0, 200, getLastWeekDates(), loadGraph);
 	});
 
 	$("#btn-retry").on("click", retryClicked);
@@ -36,6 +37,140 @@ function onLoad() {
 
 	$("#more_stats").on("click", moreStatisticsClicked);
 	$("#more_wallet").on("click", moreWalletClicked);
+}
+
+function getAccountHistory(start, limit, found, callback) {
+	if (start === 0) {
+		start = -1;
+	}
+
+	steem.api.getAccountHistory(username, start, limit, function (err, result) {
+		if (err || !result) {
+          console.log('Error loading account history: ' + err);
+          return;
+        }
+
+		result.forEach(function(trans, index) {
+			const timestamp = new Date(trans[1].timestamp.split('T')[0]);
+			if (!isOlderThanOneWeek(timestamp)) {
+				if (trans[1].op[0] !== 'author_reward') {
+					if (index === limit) {
+						getAccountHistory(trans[0] - limit, limit, found, callback);
+					}
+
+					return;
+				}
+				const op = trans[1].op;
+				found[trans[1].timestamp.split('T')[0]].push(op);
+
+				if (index === limit) {
+					getAccountHistory(trans[0] - limit, limit, found, callback);
+				}
+			} else {
+				if (index === limit) {
+					loadGraph(found);
+				}
+			}
+		});
+	});
+}
+
+function loadGraph(data) {
+	$('#chart-indicator').addClass('hidden');
+	$('#myChart').removeClass('hidden');
+
+	const ctx = document.getElementById("myChart").getContext('2d');
+	const chart = new Chart(ctx, {
+	    type: 'bar',
+	    data: {
+	        labels: ["", "", "", "", "", "", ""],
+	        datasets: [{
+	            label: 'SBD',
+	            data: getGraphData(data),
+	            backgroundColor: [
+	                'rgba(255, 99, 132, 0.6)',
+	                'rgba(255, 99, 132, 0.6)',
+	                'rgba(255, 99, 132, 0.6)',
+	                'rgba(255, 99, 132, 0.6)',
+	                'rgba(255, 99, 132, 0.6)',
+	                'rgba(255, 99, 132, 0.6)',
+	                'rgba(255, 99, 132, 0.6)',
+	            ],
+	            borderColor: [
+	                'rgba(255, 99, 132, 1)',
+	                'rgba(255, 99, 132, 1)',
+	                'rgba(255, 99, 132, 1)',
+	                'rgba(255, 99, 132, 1)',
+	                'rgba(255, 99, 132, 1)',
+	                'rgba(255, 99, 132, 1)',
+	                'rgba(255, 99, 132, 1)',
+	            ],
+	            borderWidth: 1
+	        },
+			// {
+	        //     label: 'VESTS',
+	        //     data: [12, 19, 3, 5, 2, 3],
+	        //     backgroundColor: [
+	        //         'rgba(54, 162, 235, 0.6)',
+	        //         'rgba(54, 162, 235, 0.6)',
+	        //         'rgba(54, 162, 235, 0.6)',
+	        //         'rgba(54, 162, 235, 0.6)',
+	        //         'rgba(54, 162, 235, 0.6)',
+	        //         'rgba(54, 162, 235, 0.6)',
+	        //         'rgba(54, 162, 235, 0.6)',
+	        //     ],
+	        //     borderColor: [
+	        //         'rgba(54, 162, 235, 1)',
+	        //         'rgba(54, 162, 235, 1)',
+	        //         'rgba(54, 162, 235, 1)',
+	        //         'rgba(54, 162, 235, 1)',
+	        //         'rgba(54, 162, 235, 1)',
+	        //         'rgba(54, 162, 235, 1)',
+	        //         'rgba(54, 162, 235, 1)',
+	        //     ],
+	        //     borderWidth: 1
+	        // }
+			]
+	    },
+	    options: {
+			title: {
+                display: true,
+                text: "Earned last 7 Days"
+            },
+			tooltips: {
+		        enabled: false
+		    },
+			legend: {
+				position: 'bottom',
+			},
+	        scales: {
+	            yAxes: [{
+					display: false,
+	                ticks: {
+	                    beginAtZero:true
+	                }
+	            }]
+	        },
+			animation: {
+		        duration: 0.1,
+		        onComplete: function () {
+		            var chartInstance = this.chart,
+	                ctx = chartInstance.ctx;
+		            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+		            ctx.textAlign = 'center';
+		            ctx.textBaseline = 'bottom';
+
+		            this.data.datasets.forEach(function (dataset, i) {
+		                var meta = chartInstance.controller.getDatasetMeta(i);
+		                meta.data.forEach(function (bar, index) {
+		                    var data = dataset.data[index];
+		                    ctx.fillText(data.toFixed(2), bar._model.x, bar._model.y - 5);
+		                });
+		            });
+		        }
+		    }
+	    }
+	});
 }
 
 function moreWalletClicked(evt) {
@@ -265,7 +400,7 @@ function setUpPricesAndValue() {
 	$('#steem_total_value')[0].innerHTML = steemValue + currencySymbol;
 	$('#sp_total_value')[0].innerHTML = spValue + currencySymbol;
 	$('#sbd_total_value')[0].innerHTML = sbdValue + currencySymbol;
-	$('#total_value')[0].innerHTML = (Number(sbdValue) + Number(spValue) + Number(steemValue)) + currencySymbol;
+	$('#total_value')[0].innerHTML = (Number(sbdValue) + Number(spValue) + Number(steemValue)).toFixed(2) + currencySymbol;
 }
 
 function setSteemPower(userData) {

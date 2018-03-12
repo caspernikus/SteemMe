@@ -6,7 +6,7 @@
       "48": "./img/icon_48px.png",
       "128": "./img/icon_128px.png"
   },
-  "version": "0.0.7",
+  "version": "0.0.8",
   "manifest_version": 2,
   "description": "",
   "browser_action": {
@@ -24,5 +24,5 @@
   "permissions": [
     "storage"
   ],
-  "content_security_policy": "script-src 'self' https://cdn.steemjs.com; object-src 'self'"
+  "content_security_policy": "script-src 'self' https://cdnjs.cloudflare.com https://cdn.steemjs.com; object-src 'self'"
 }

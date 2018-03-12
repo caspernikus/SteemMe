@@ -2,6 +2,7 @@
 <head>
     <script src="../js/vendor/jquery.min.js"></script>
     <script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../js/index.js"></script>
     <link rel="stylesheet" href="../styles/styles.css">
@@ -67,6 +68,11 @@
                 <div class="hidden" style="margin: 20px 20px; text-align: center" id="rewards-container">
                     <b>Unclaimed rewards: <span id="rewards-unclaimed"></span></b>
                     <button class="button_redeem">Claim Rewards</button>
+                </div>
+
+                <div class="">
+                    <div id="chart-indicator" class="loader" style="margin-top: 20px"></div>
+                    <canvas id="myChart" class="hidden"></canvas>
                 </div>
             </div>
         </div>
