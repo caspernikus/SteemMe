@@ -20,7 +20,21 @@
     </div>
     <div id="indicator" class="loader"></div>
     <div id="container" class="hidden">
-        <div id="user_avatar" class="flex">
+        <div id="user_avatar">
+        </div>
+        <div id="profile-container">
+            <div class="flex hrcustom" style="margin-top: 5px">
+                <span class="oi" data-glyph="person"></span>Profile
+                <hr style="flex: 1; margin: 0px 10px">
+            </div>
+            <div class="flex space-around">
+                <div class="wallet-div" id="following_amount">
+                </div>
+                <div class="wallet-div" id="follower_amount">
+                </div>
+                <div class="wallet-div" id="posts_amount">
+                </div>
+            </div>
         </div>
         <div id="wallet-container">
             <div class="flex hrcustom">
@@ -82,21 +96,6 @@
                 <hr style="flex: 1; margin: 0px 10px">
                 <span class="oi quick_link small-text" data-glyph="plus" id="more_stats"></span>
             </div>
-            <div id="stats-detail-container" class="hidden">
-                <div class="flex" id="vote_power_container">
-                    <div class="progress-circle" id="bandwidth_percentage">
-                       <span style="color: #c0392b" id="bandwidth_span">%</span>
-                       <div class="left-half-clipper">
-                          <div style="background-color: #c0392b" class="first50-bar"></div>
-                          <div style="border: 0.45em solid #c0392b" class="value-bar"></div>
-                       </div>
-                    </div>
-                    <div style="flex: 2;">
-                        <div class="bold">Bandwidth used:</div>
-                        <div id="bandwidth_used" style="color: gray; margin: 5px;">~ </div>
-                    </div>
-                </div>
-            </div>
             <div class="flex" style="margin-top: 15px" id="vote_power_container">
                 <div class="progress-circle" id="vote_power_progress">
                    <span style="color: #06D6A9" id="vote_power_span">%</span>
@@ -124,6 +123,27 @@
                     <div id="pending_payout" style="color: gray; margin: 5px;">~ </div>
                     <div>Today Pending Payout</div>
                     <div id="pending_payout_tdy" style="color: gray; margin: 5px;">~ </div>
+                    <div class="stats-detail-container hidden">
+                        <div>Total Payout Last 7 Days (SBD)</div>
+                        <div id="total_sbd_payout" style="color: gray; margin: 5px;">~ </div>
+                        <div>Total Payout Last 7 Days (SP)</div>
+                        <div id="total_sp_payout" style="color: gray; margin: 5px;">~ </div>
+                    </div>
+                </div>
+            </div>
+            <div class="stats-detail-container hidden">
+                <div class="flex" id="vote_power_container">
+                    <div class="progress-circle" id="bandwidth_percentage">
+                       <span style="color: #c0392b" id="bandwidth_span">%</span>
+                       <div class="left-half-clipper">
+                          <div style="background-color: #c0392b" class="first50-bar"></div>
+                          <div style="border: 0.45em solid #c0392b" class="value-bar"></div>
+                       </div>
+                    </div>
+                    <div style="flex: 2;">
+                        <div class="bold">Bandwidth used:</div>
+                        <div id="bandwidth_used" style="color: gray; margin: 5px;">~ </div>
+                    </div>
                 </div>
             </div>
         </div>

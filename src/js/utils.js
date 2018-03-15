@@ -47,23 +47,41 @@ function getLastWeekDates() {
     return returnObject;
 }
 
-function getGraphData(data) {
-    var newData = [];
+function getGraphData(data, total_vesting_fund, total_vesting_shares) {
+    var newData = {
+        'sbd': [],
+        'sp': []
+    };
 
     Object.keys(data).forEach((key) => {
         var dayValues = data[key];
-        var dayValue = 0;
+        var daySBDValue = 0;
+        var daySPValue = 0;
 
         dayValues.forEach((value) => {
-            const amount = Number(value[1].sbd_payout.split(' ')[0]);
+            const sbdAmount = Number(value[1].sbd_payout.split(' ')[0]);
+            const sp = steem.formatter.vestToSteem(value[1].vesting_payout, total_vesting_shares, total_vesting_fund);
+            const spAmount = Number(sp);
 
-            dayValue += amount;
+            daySBDValue += sbdAmount;
+            daySPValue += spAmount;
         });
 
-        newData.push(dayValue);
+        newData['sbd'].push(daySBDValue);
+        newData['sp'].push(daySPValue);
     });
 
     return newData;
+}
+
+function calculateTotal(data) {
+    var total = 0;
+
+    data.forEach((value) => {
+        total += value;
+    });
+
+    return total;
 }
 
 function isOlderThanOneWeek(date) {

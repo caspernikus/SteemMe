@@ -8,6 +8,8 @@ var userData = null;
 var currency = null;
 var active_key = null;
 var activeDetailContainer = '';
+var total_vesting_fund = '';
+var total_vesting_shares = '';
 
 function onLoad() {
 	chrome.storage.sync.get(["username", "currency", "active"], function(items) {
@@ -79,6 +81,11 @@ function loadGraph(data) {
 	$('#chart-indicator').addClass('hidden');
 	$('#myChart').removeClass('hidden');
 
+	const graphData = getGraphData(data, total_vesting_fund, total_vesting_shares);
+
+	$('#total_sbd_payout')[0].innerHTML = '~ ' + calculateTotal(graphData['sbd']).toFixed(2) + ' SBD';
+	$('#total_sp_payout')[0].innerHTML = '~ ' + calculateTotal(graphData['sp']).toFixed(2) + ' SP';
+
 	const ctx = document.getElementById("myChart").getContext('2d');
 	const chart = new Chart(ctx, {
 	    type: 'bar',
@@ -86,7 +93,7 @@ function loadGraph(data) {
 	        labels: ["", "", "", "", "", "", ""],
 	        datasets: [{
 	            label: 'SBD',
-	            data: getGraphData(data),
+	            data: graphData['sbd'],
 	            backgroundColor: [
 	                'rgba(255, 99, 132, 0.6)',
 	                'rgba(255, 99, 132, 0.6)',
@@ -107,30 +114,29 @@ function loadGraph(data) {
 	            ],
 	            borderWidth: 1
 	        },
-			// {
-	        //     label: 'VESTS',
-	        //     data: [12, 19, 3, 5, 2, 3],
-	        //     backgroundColor: [
-	        //         'rgba(54, 162, 235, 0.6)',
-	        //         'rgba(54, 162, 235, 0.6)',
-	        //         'rgba(54, 162, 235, 0.6)',
-	        //         'rgba(54, 162, 235, 0.6)',
-	        //         'rgba(54, 162, 235, 0.6)',
-	        //         'rgba(54, 162, 235, 0.6)',
-	        //         'rgba(54, 162, 235, 0.6)',
-	        //     ],
-	        //     borderColor: [
-	        //         'rgba(54, 162, 235, 1)',
-	        //         'rgba(54, 162, 235, 1)',
-	        //         'rgba(54, 162, 235, 1)',
-	        //         'rgba(54, 162, 235, 1)',
-	        //         'rgba(54, 162, 235, 1)',
-	        //         'rgba(54, 162, 235, 1)',
-	        //         'rgba(54, 162, 235, 1)',
-	        //     ],
-	        //     borderWidth: 1
-	        // }
-			]
+			{
+	            label: 'SP',
+	            data: graphData['sp'],
+	            backgroundColor: [
+	                'rgba(54, 162, 235, 0.6)',
+	                'rgba(54, 162, 235, 0.6)',
+	                'rgba(54, 162, 235, 0.6)',
+	                'rgba(54, 162, 235, 0.6)',
+	                'rgba(54, 162, 235, 0.6)',
+	                'rgba(54, 162, 235, 0.6)',
+	                'rgba(54, 162, 235, 0.6)',
+	            ],
+	            borderColor: [
+	                'rgba(54, 162, 235, 1)',
+	                'rgba(54, 162, 235, 1)',
+	                'rgba(54, 162, 235, 1)',
+	                'rgba(54, 162, 235, 1)',
+	                'rgba(54, 162, 235, 1)',
+	                'rgba(54, 162, 235, 1)',
+	                'rgba(54, 162, 235, 1)',
+	            ],
+	            borderWidth: 1
+	        }]
 	    },
 	    options: {
 			title: {
@@ -156,7 +162,7 @@ function loadGraph(data) {
 		        onComplete: function () {
 		            var chartInstance = this.chart,
 	                ctx = chartInstance.ctx;
-		            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+		            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize - 3, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
 		            ctx.textAlign = 'center';
 		            ctx.textBaseline = 'bottom';
 
@@ -164,7 +170,7 @@ function loadGraph(data) {
 		                var meta = chartInstance.controller.getDatasetMeta(i);
 		                meta.data.forEach(function (bar, index) {
 		                    var data = dataset.data[index];
-		                    ctx.fillText(data.toFixed(2), bar._model.x, bar._model.y - 5);
+		                    ctx.fillText(data.toFixed(1), bar._model.x, bar._model.y - 10);
 		                });
 		            });
 		        }
@@ -199,9 +205,9 @@ function moreStatisticsClicked(evt) {
 	evt.preventDefault();
 
 	if (activeDetailContainer === 'stats') {
-		$('#wallet-container').removeClass('hidden');
+		$('#more_wallet').removeClass('hidden');
 		$('#links-container').removeClass('hidden');
-		$('#stats-detail-container').addClass('hidden');
+		$('.stats-detail-container').addClass('hidden');
 		activeDetailContainer = '';
 		evt.currentTarget.dataset.glyph = 'plus';
 
@@ -209,9 +215,9 @@ function moreStatisticsClicked(evt) {
 		return;
 	}
 
-	$('#wallet-container').addClass('hidden');
+	$('#more_wallet').addClass('hidden');
 	$('#links-container').addClass('hidden');
-	$('#stats-detail-container').removeClass('hidden');
+	$('.stats-detail-container').removeClass('hidden');
 	evt.currentTarget.dataset.glyph = 'minus';
 	activeDetailContainer = 'stats';
 	$(window).trigger('resize');
@@ -348,8 +354,8 @@ function getAccountData(username) {
 		}
 
         const userAvatar = $("#user_avatar")[0];
-		userAvatar.innerHTML = "<div class='profile-pic' style='background-size: cover; background-repeat: no-repeat; background-position: 50% 50%; background-image: url(https://steemitimages.com/u/"+ userData.name +"/avatar);'></div>" +
-		"<div style='margin-left: 10px; flex: 1'><div class='username'>"+ userData.name +" ("+ calculateRep(userData.reputation) +")</div><div id='badges' class='badges'></div></div>";
+		userAvatar.innerHTML = "<div class='profile-pic' style='margin: auto; background-size: cover; background-repeat: no-repeat; background-position: 50% 50%; background-image: url(https://steemitimages.com/u/"+ userData.name +"/avatar);'></div>" +
+		"<div style='margin-left: 10px; flex: 1'><div class='username' style='text-align: center'>"+ userData.name +" ("+ calculateRep(userData.reputation) +")</div></div>";
 
         const steemBalance = $("#steem_balance")[0];
         steemBalance.innerHTML = "<div style='font-weight: bold; font-size: 14px'>"+ userData.balance.split(' ')[0] +"</div>" +
@@ -373,10 +379,14 @@ function getAccountData(username) {
             followCount = result.follower_count;
             followingCount = result.following_count;
 
-            const followStata = $("#badges")[0];
-            followStata.innerHTML = "<div class='badge'><span class='oi' data-glyph='person'></span> "+ followingCount +"</div>" +
-            "<div class='badge'><span class='oi' data-glyph='people'></span> "+ followCount +"</div>" +
-            "<div class='badge'><span class='oi' data-glyph='comment-square'></span> "+ userData.post_count +"</div>";
+	        $("#following_amount")[0].innerHTML = "<div style='font-weight: bold; font-size: 14px; margin-bottom: 5px'>"+ followingCount +"</div>" +
+			"<span style='margin: 0px;' class='oi' data-glyph='person'></span>";
+
+	        $("#follower_amount")[0].innerHTML = "<div style='font-weight: bold; font-size: 14px; margin-bottom: 5px'>"+ followCount +"</div>" +
+			"<span style='margin: 0px;' class='oi' data-glyph='people'></span>";
+
+	        $("#posts_amount")[0].innerHTML = "<div style='font-weight: bold; font-size: 14px; margin-bottom: 5px'>"+ userData.post_count +"</div>" +
+			"<span style='margin: 0px;' class='oi' data-glyph='comment-square'></span>";
         });
     });
 }
@@ -409,8 +419,8 @@ function setSteemPower(userData) {
 	const rec_vesting_shares = userData.received_vesting_shares;
 
 	steem.api.getDynamicGlobalProperties(function(err, result) {
-		const total_vesting_shares = result.total_vesting_shares;
-     	const total_vesting_fund = result.total_vesting_fund_steem;
+		total_vesting_shares = result.total_vesting_shares;
+     	total_vesting_fund = result.total_vesting_fund_steem;
 
 		const steem_power = steem.formatter.vestToSteem(vesting_shares, total_vesting_shares, total_vesting_fund);
 		const delegated_steem_power= steem.formatter.vestToSteem((rec_vesting_shares.split(' ')[0] - del_vesting_shares.split(' ')[0])+' VESTS', total_vesting_shares, total_vesting_fund);
